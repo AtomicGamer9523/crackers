@@ -1,2 +1,3 @@
-# crackers
-For all your cracking and snacking needs
+# Crackers
+
+For all your munching and cracking needs ;)

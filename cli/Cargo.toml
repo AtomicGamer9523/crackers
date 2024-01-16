@@ -1,0 +1,18 @@
+[package]
+name = "crackers-cli"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "crackers"
+path = "main.rs"
+
+[dependencies.crackers]
+path = "../crackers"
+
+[dependencies.simple_logger]
+features = ["colors"]
+version = "4.3"
+
+[dependencies]
+log = "0.4"
