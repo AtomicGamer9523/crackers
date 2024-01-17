@@ -1,7 +1,14 @@
 use crate::*;
 
-pub trait Transformer {
+pub trait Transformer: Send + Sync {
     fn transform(&self, input: &Bytes) -> Bytes;
+}
+
+impl<F: Fn(&Bytes) -> Bytes + Send + Sync> Transformer for F {
+    #[inline]
+    fn transform(&self, input: &Bytes) -> Bytes {
+        self(input)
+    }
 }
 
 pub struct Sha256Transformer(sha2::Sha256);

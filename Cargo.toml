@@ -4,3 +4,12 @@ members = [
     "crackers",
     "cli",
 ]
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+debug = false
+debug-assertions = false
+codegen-units = 1
+panic = "abort"
+overflow-checks = false

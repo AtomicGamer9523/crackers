@@ -1,6 +1,8 @@
+use super::arr::{Arr, Arr_with_start};
+
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Bytes {
-    vec: Vec<u8>,
+    vec: Arr<u8>,
     increment: u8,
     start: u8,
 }
@@ -8,7 +10,7 @@ pub struct Bytes {
 impl core::fmt::UpperHex for Bytes {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         for byte in self.iter() {
-            write!(f, "0x{:02X} ", byte)?;
+            write!(f, "{:02X}", byte)?;
         }
         Ok(())
     }
@@ -17,7 +19,7 @@ impl core::fmt::UpperHex for Bytes {
 impl core::fmt::LowerHex for Bytes {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         for byte in self.iter() {
-            write!(f, "0x{:02x} ", byte)?;
+            write!(f, "{:02x}", byte)?;
         }
         Ok(())
     }
@@ -25,19 +27,19 @@ impl core::fmt::LowerHex for Bytes {
 
 impl Bytes {
     pub const fn new() -> Self {
-        Self { vec: Vec::new(), increment: 1, start: 0 }
+        Self { vec: Arr::new(), increment: 1, start: 0 }
     }
 
     pub const fn new_with_increment(increment: u8) -> Self {
-        Self { vec: Vec::new(), increment, start: 0 }
+        Self { vec: Arr::new(), increment, start: 0 }
     }
 
     pub fn new_with_start(start: u8) -> Self {
-        Self { vec: vec![start], increment: 1, start }
+        Self { vec: Arr_with_start(start), increment: 1, start }
     }
 
     pub fn new_with_start_and_increment(start: u8, increment: u8) -> Self {
-        Self { vec: vec![start], increment, start }
+        Self { vec: Arr_with_start(start), increment, start }
     }
 
     pub fn bitincrement(&mut self) {
@@ -45,7 +47,7 @@ impl Bytes {
         let inc = self.increment;
         let strt = self.start;
         let mut carry = true;
-        for byte in self.iter_mut() {
+        for byte in self.iter_mut().rev() {
             if carry {
                 if *byte >= max {
                     *byte = strt;
@@ -57,13 +59,13 @@ impl Bytes {
             }
         }
         if carry {
-            self.push(0);
+            self.push(1);
         }
     }
 }
 
 impl core::ops::Deref for Bytes {
-    type Target = Vec<u8>;
+    type Target = Arr<u8>;
     fn deref(&self) -> &Self::Target {
         &self.vec
     }
@@ -75,13 +77,13 @@ impl core::ops::DerefMut for Bytes {
     }
 }
 
-impl From<Vec<u8>> for Bytes {
-    fn from(input: Vec<u8>) -> Self {
+impl From<Arr<u8>> for Bytes {
+    fn from(input: Arr<u8>) -> Self {
         Self { vec: input, increment: 1, start: 0 }
     }
 }
 
-impl From<Bytes> for Vec<u8> {
+impl From<Bytes> for Arr<u8> {
     fn from(input: Bytes) -> Self {
         input.vec
     }

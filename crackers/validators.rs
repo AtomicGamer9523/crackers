@@ -1,4 +1,4 @@
-pub trait Validator {
+pub trait Validator: Send + Sync {
     fn validate(&self, bytes: &[u8]) -> bool;
 }
 
@@ -19,7 +19,7 @@ impl MultiValidator {
 impl Validator for MultiValidator {
     #[inline]
     fn validate(&self, bytes: &[u8]) -> bool {
-        nudge::unlikely(self.0.iter().all(|v| v.validate(bytes)))
+        llvm::unlikely(self.0.iter().all(|v| v.validate(bytes)))
     }
 }
 
@@ -35,7 +35,7 @@ impl<T: Into<Vec<u8>>> From<T> for StartsWithValidator {
 impl Validator for StartsWithValidator {
     #[inline]
     fn validate(&self, bytes: &[u8]) -> bool {
-        nudge::unlikely(bytes.starts_with(&self.0))
+        llvm::unlikely(bytes.starts_with(&self.0))
     }
 }
 
@@ -51,6 +51,6 @@ impl<T: Into<Vec<u8>>> From<T> for EndsWithValidator {
 impl Validator for EndsWithValidator {
     #[inline]
     fn validate(&self, bytes: &[u8]) -> bool {
-        nudge::unlikely(bytes.ends_with(&self.0))
+        llvm::unlikely(bytes.ends_with(&self.0))
     }
 }
