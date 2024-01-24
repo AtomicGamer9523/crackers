@@ -2,27 +2,6 @@ pub trait Validator: Send + Sync {
     fn validate(&self, bytes: &[u8]) -> bool;
 }
 
-pub struct MultiValidator(Vec<Box<dyn Validator>>);
-
-impl MultiValidator {
-    #[inline]
-    pub fn new() -> Self {
-        Self(Vec::new())
-    }
-
-    #[inline]
-    pub fn push<T: Validator + 'static>(&mut self, validator: T) {
-        self.0.push(Box::new(validator));
-    }
-}
-
-impl Validator for MultiValidator {
-    #[inline]
-    fn validate(&self, bytes: &[u8]) -> bool {
-        llvm::unlikely(self.0.iter().all(|v| v.validate(bytes)))
-    }
-}
-
 pub struct StartsWithValidator(Vec<u8>);
 
 impl<T: Into<Vec<u8>>> From<T> for StartsWithValidator {

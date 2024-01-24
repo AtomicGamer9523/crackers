@@ -1,0 +1,9 @@
+[package]
+name = "llvm"
+description = "LLVM Utilities"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "llvm"
+path = "lib.rs"

@@ -2,21 +2,14 @@ use crackers::*;
 
 /// Minimal example.
 fn main() {
-    // simple_logger::init().unwrap();
+    simple_logger::SimpleLogger::new()
+        .with_level(log::LevelFilter::Debug)
+        .init().unwrap();
 
-    // let mut validator = MultiValidator::new();
-    // validator.push(StartsWithValidator::from([0, 0]));
-    // validator.push(EndsWithValidator::from([0, 0, 0]));
-
-    let config = CrackerConfig::new_with_perf(
-        Sha256Transformer::new(),
-        EndsWithValidator::from([0, 0, 0, 0]),
-        CrackerPerformanceConfig::new(10),
+    // the actual cracking
+    let input = crack(
+        Sha256Transformer,
+        StartsWithValidator::from(&[1, 2, 3, 4])
     );
-
-    // let start = std::time::Instant::now();
-    // let bytes = crack(config);
-    // let end = std::time::Instant::now();
-    // log::info!("cracked: {:?} in {:?}", bytes, end - start);
-    crack(config);
+    println!("input: {:?}", input)
 }

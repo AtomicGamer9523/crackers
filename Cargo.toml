@@ -2,12 +2,14 @@
 resolver = "2"
 members = [
     "crackers",
+    "llvm",
+
     "cli",
 ]
 
 [profile.release]
 opt-level = 3
-lto = "fat"
+lto = true
 debug = false
 debug-assertions = false
 codegen-units = 1

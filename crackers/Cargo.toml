@@ -7,15 +7,14 @@ edition = "2021"
 name = "crackers"
 path = "lib.rs"
 
-[dependencies.llvm] # For LLVM optimization
-package = "nudge"
-version = "0.2"
-default-features = false
-features = ["nightly"]
+[dependencies.llvm]
+path = "../llvm"
 
 [dependencies]
 # Core dependencies
 digest = "0.10"
+log = "0.4"
+hex = "0.4"
 
 # Optional dependencies
 sha-1 = { version = "0.10", optional = true }
