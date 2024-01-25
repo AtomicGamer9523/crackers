@@ -17,9 +17,17 @@ log = "0.4"
 hex = "0.4"
 
 # Optional dependencies
-sha-1 = { version = "0.10", optional = true }
-md-5 = { version = "0.10", optional = true }
-sha2 = { version = "0.10", optional = true }
+[dependencies.sha-1]
+version = "0.10"
+optional = true
+
+[dependencies.md-5]
+version = "0.10"
+optional = true
+
+[dependencies.sha2]
+version = "0.10"
+optional = true
 
 [features]
 default = ["sha1", "md5", "sha2"]
