@@ -14,5 +14,11 @@ path = "../crackers"
 features = ["colors"]
 version = "4.3"
 
+[dependencies.clap]
+version = "4"
+features = [
+    "derive"
+]
+
 [dependencies]
 log = "0.4"

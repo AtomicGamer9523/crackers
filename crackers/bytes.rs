@@ -43,6 +43,16 @@ impl<const N: usize> Bytes<N> {
             }
         }
     }
+    /// Turns the bytes into a string (lossy).
+    #[inline]
+    pub fn string_lossy(&self) -> String {
+        String::from_utf8_lossy(&self.bytes).into()
+    }
+    /// Turns the bytes into a string.
+    #[inline]
+    pub fn string(&self) -> Result<String, std::string::FromUtf8Error> {
+        String::from_utf8(self.bytes.to_vec())
+    }
 }
 
 impl<const N: usize> core::ops::Deref for Bytes<N> {
@@ -67,5 +77,34 @@ impl<const N: usize> core::fmt::Display for Bytes<N> {
             write!(f, "{:3} ", self.bytes[i])?;
         }
         Ok(())
+    }
+}
+
+impl From<Bytes<1>> for u8 {
+    #[inline(always)]
+    fn from(bytes: Bytes<1>) -> Self {
+        bytes.bytes[0]
+    }
+}
+
+impl<const N: usize> From<Bytes<N>> for [u8; N] {
+    #[inline(always)]
+    fn from(bytes: Bytes<N>) -> Self {
+        bytes.bytes
+    }
+}
+
+impl<const N: usize> From<[u8; N]> for Bytes<N> {
+    #[inline(always)]
+    fn from(bytes: [u8; N]) -> Self {
+        Self::new(bytes)
+    }
+}
+
+impl<const N: usize> TryFrom<Bytes<N>> for String {
+    type Error = std::string::FromUtf8Error;
+    #[inline(always)]
+    fn try_from(bytes: Bytes<N>) -> Result<Self, Self::Error> {
+        bytes.string()
     }
 }

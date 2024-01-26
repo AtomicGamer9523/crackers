@@ -23,4 +23,7 @@ impl<const N: usize, F> Transformer<N> for F where
 }
 
 mod sha256;
-pub use sha256::Sha256Transformer;
+mod sha1;
+
+pub use self::sha256::Sha256Transformer;
+pub use self::sha1::Sha1Transformer;
