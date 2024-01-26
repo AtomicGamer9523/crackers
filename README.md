@@ -1,7 +1,16 @@
-<p align="center"><img src="./crackers/logo.png" alt="crackers-logo" style="width:10%"/></p><h1 align="center"><b>Crackers</b></h1><p align="center">For all your munching and cracking needs ;)</p><div align="center"><a><img src="https://img.shields.io/github/license/AtomicGamer9523/crackers"></a> <a href="https://www.github.linkrbot.com/rinux/rinuxcore"><a href="https://www.github.com/AtomicGamer9523"><img src="https://img.shields.io/github/followers/atomicgamer9523?label=AtomicGamer9523%20(Me)&style=social"/></a></div>
+<p align="center">
+    <img src="./crackers/logo.png" alt="crackers-logo" style="width:10%"/>
+</p>
+<h1 align="center"><b>Crackers</b></h1>
+<p align="center">For all your munching and cracking needs ;)</p>
+<div align="center">
+    <a><img src="https://img.shields.io/github/license/AtomicGamer9523/crackers"></a>
+    <a href="https://www.github.com/AtomicGamer9523">
+        <img src="https://img.shields.io/github/followers/atomicgamer9523?label=AtomicGamer9523%20(Me)&style=social"/>
+    </a>
+</div>
 
-
-### Examples
+<h3>Examples</h3>
 
 ```bash
 # Crack a sha256 hash that starts with 0xdeadbeef
@@ -14,7 +23,7 @@ crackers.exe -j 4 -t sha1 endswith 000
 crackers.exe -a -t md5 startswith 1234
 ```
 
-### Help
+<h3>Help</h3>
 
 also available via `crackers help`
 
