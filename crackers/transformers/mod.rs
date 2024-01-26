@@ -35,6 +35,8 @@ impl<T> Transformer for Box<T> where
 
 mod sha256;
 mod sha1;
+mod md5;
 
 pub use self::sha256::Sha256Transformer;
 pub use self::sha1::Sha1Transformer;
+pub use self::md5::Md5Transformer;

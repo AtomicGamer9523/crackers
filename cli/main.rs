@@ -89,10 +89,13 @@ fn main() {
 
     let transformer: Box<dyn Transformer> = match args.transformer {
         config::Transformers::Sha256 => {
-            Box::new(Sha256Transformer::default())
+            Box::new(Sha256Transformer)
         },
         config::Transformers::Sha1 => {
-            Box::new(Sha1Transformer::default())
+            Box::new(Sha1Transformer)
+        },
+        config::Transformers::Md5 => {
+            Box::new(Md5Transformer)
         }
     };
 
