@@ -24,24 +24,24 @@ use prelude::IntoConfig;
 
 /// Creates a config.
 #[inline(always)]
-pub fn config<const N: usize, T, V, I>(i: I) -> Config<N, T, V> where
-    I: IntoConfig<N, T, V>,
-    T: Transformer<N>,
+pub fn config<T, V, I>(i: I) -> Config<T, V> where
+    I: IntoConfig<T, V>,
+    T: Transformer,
     V: Validator,
 { Config::from(i) }
 
 /// Cracks with the given config.
 /// Uses multiple threads.
-pub fn crack_multithreaded<const N: usize, T, V>(
-    config: Config<N, T, V>, threads: u8
-) -> Bytes<N> where
-    T: Transformer<N> + 'static,
+pub fn crack_multithreaded<T, V>(
+    config: Config<T, V>, threads: u8
+) -> Bytes where
+    T: Transformer + 'static,
     V: Validator + 'static
 {
     use llvm::*;
 
     #[allow(unused)]
-    let mut result = Option::<Bytes<N>>::None;
+    let mut result = Option::<Bytes>::None;
     let result_ptr = r(&result);
     #[allow(unused)]
     let mut done = false;
@@ -51,9 +51,9 @@ pub fn crack_multithreaded<const N: usize, T, V>(
 
     for i in 0..threads {
         std::thread::spawn(move || {
-            let mut input = Bytes::new([65u8; N]);
+            let mut input = transformer_ptr.init_bytes();
             input[0] = 65 + i;
-            let mut output = [0u8; N];
+            let mut output = transformer_ptr.init_bytes();
             let input_ptr = r(&input);
             if config.pretty {
                 std::thread::spawn(move || {
@@ -106,12 +106,12 @@ pub fn crack_multithreaded<const N: usize, T, V>(
 }
 
 /// Cracks with the given config.
-pub fn crack<const N: usize, T, V>(config: Config<N, T, V>) -> Bytes<N> where
-    T: Transformer<N>,
+pub fn crack<T, V>(config: Config<T, V>) -> Bytes where
+    T: Transformer,
     V: Validator
 {
-    let mut input = Bytes::new([65u8; N]);
-    let mut output = [0u8; N];
+    let mut input = config.transformer.init_bytes();
+    let mut output = config.transformer.init_bytes();
     loop {
         config.transformer.transform(&input, &mut output);
 

@@ -5,9 +5,8 @@ pub trait Validator: Send + Sync {
     fn validate(&self, bytes: &[u8], only_ascii: bool) -> bool;
 }
 
-impl<V: Validator> Validator for Box<V>
-where
-    V: ?Sized
+impl<V> Validator for Box<V> where
+    V: Validator + ?Sized
 {
     #[inline(always)]
     fn validate(&self, bytes: &[u8], only_ascii: bool) -> bool {

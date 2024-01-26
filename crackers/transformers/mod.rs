@@ -1,24 +1,35 @@
 use ::digest::Digest;
+use crate::Bytes;
 
 /// A transformer is used to transform the input bytes into output bytes.
-pub trait Transformer<const N: usize>: Send + Sync {
+pub trait Transformer: Send + Sync {
     /// Transforms the input bytes into output bytes.
     /// 
     /// By default, this copies the input bytes into the output bytes.
     #[inline(always)]
-    fn transform(&self, input: &[u8; N], output: &mut [u8; N]) {
+    fn transform(&self, input: &Bytes, output: &mut Bytes) {
         output.copy_from_slice(input);
     }
+    /// Initializes the bytes.
+    /// 
+    /// By default, this returns an empty `Bytes`.
+    fn init_bytes(&self) -> Bytes;
 }
 
-impl<const N: usize, F> Transformer<N> for F where
-    F: Fn(&[u8; N], &mut [u8; N]) + Send + Sync
+impl<T> Transformer for Box<T> where
+    T: Transformer + ?Sized
 {
-    /// Automatically implements the `Transformer` trait for all functions
-    /// that take a `&[u8; N]` and a `&mut [u8; N]` and return `()`.
+    /// Automatically implements the `Transformer` trait for all boxed
+    /// `Transformer`s.
     #[inline(always)]
-    fn transform(&self, input: &[u8; N], output: &mut [u8; N]) {
-        self(input, output)
+    fn transform(&self, input: &Bytes, output: &mut Bytes) {
+        (**self).transform(input, output)
+    }
+    /// Automatically implements the `Transformer` trait for all boxed
+    /// `Transformer`s.
+    #[inline(always)]
+    fn init_bytes(&self) -> Bytes {
+        (**self).init_bytes()
     }
 }
 

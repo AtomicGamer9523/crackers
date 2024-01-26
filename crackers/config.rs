@@ -3,8 +3,8 @@ use crate::*;
 /// A config for cracking.
 #[repr(C)]
 #[derive(Debug, Clone)]
-pub struct Config<const N: usize, T, V> where
-    T: Transformer<N>,
+pub struct Config<T, V> where
+    T: Transformer,
     V: Validator
 {
     /// The transformer to use.
@@ -20,28 +20,28 @@ pub struct Config<const N: usize, T, V> where
 }
 
 /// Something that can be converted into a config.
-pub trait IntoConfig<const N: usize, T, V> where
-    T: Transformer<N>,
+pub trait IntoConfig<T, V> where
+    T: Transformer,
     V: Validator
 {
     /// Converts into a config.
-    fn into_config(self) -> Config<N, T, V>;
+    fn into_config(self) -> Config<T, V>;
 }
 
-impl<const N: usize, T, V> IntoConfig<N, T, V> for Config<N, T, V> where
-    T: Transformer<N>,
+impl<T, V> IntoConfig<T, V> for Config<T, V> where
+    T: Transformer,
     V: Validator
 {
     #[inline(always)]
-    fn into_config(self) -> Config<N, T, V> { self }
+    fn into_config(self) -> Config<T, V> { self }
 }
 
-impl<const N: usize, T, V> IntoConfig<N, T, V> for (T, V) where
-    T: Transformer<N>,
+impl<T, V> IntoConfig<T, V> for (T, V) where
+    T: Transformer,
     V: Validator
 {
     #[inline(always)]
-    fn into_config(self) -> Config<N, T, V> {
+    fn into_config(self) -> Config<T, V> {
         Config {
             transformer: self.0,
             validator: self.1,
@@ -52,13 +52,13 @@ impl<const N: usize, T, V> IntoConfig<N, T, V> for (T, V) where
     }
 }
 
-impl<const N: usize, T, V> Config<N, T, V> where
-    T: Transformer<N>,
+impl<T, V> Config<T, V> where
+    T: Transformer,
     V: Validator
 {
     /// Creates a config from something that can be converted into a config.
     #[inline(always)]
-    pub fn from<I: IntoConfig<N, T, V>>(i: I) -> Self {
+    pub fn from<I: IntoConfig<T, V>>(i: I) -> Self {
         i.into_config()
     }
 }

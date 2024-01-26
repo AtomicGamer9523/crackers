@@ -6,30 +6,6 @@ pub enum Transformers {
     Sha1
 }
 
-impl ::crackers::Transformer<32> for Transformers {
-    #[inline(always)]
-    fn transform(&self, input: &[u8; 32], output: &mut [u8; 32]) {
-        match self {
-            Self::Sha256 => {
-                ::crackers::Sha256Transformer.transform(input, output)
-            },
-            _ => unreachable!("sha1 is not supported for 32 bytes")
-        }
-    }
-}
-
-impl ::crackers::Transformer<20> for Transformers {
-    #[inline(always)]
-    fn transform(&self, input: &[u8; 20], output: &mut [u8; 20]) {
-        match self {
-            Self::Sha1 => {
-                ::crackers::Sha1Transformer.transform(input, output)
-            },
-            _ => unreachable!("sha256 is not supported for 20 bytes")
-        }
-    }
-}
-
 impl core::fmt::Display for Transformers {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {

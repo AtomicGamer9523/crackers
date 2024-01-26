@@ -5,9 +5,17 @@ use super::*;
 #[derive(Debug, Clone, Copy, Default)]
 pub struct Sha1Transformer;
 
-impl Transformer<20> for Sha1Transformer {
+impl Transformer for Sha1Transformer {
     #[inline]
-    fn transform(&self, input: &[u8; 20], output: &mut [u8; 20]) {
-        output.copy_from_slice(&<::sha1::Sha1 as Digest>::digest(input));
+    fn transform(&self, input: &Bytes, output: &mut Bytes) {
+        output.copy_from(&<::sha1::Sha1 as Digest>::digest(input));
+    }
+    #[inline(always)]
+    fn init_bytes(&self) -> Bytes {
+        let mut vec = Vec::new();
+        for _ in 0..20 {
+            vec.push(65);
+        }
+        Bytes::new(vec)
     }
 }

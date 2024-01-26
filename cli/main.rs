@@ -87,8 +87,17 @@ fn main() {
         }
     };
 
+    let transformer: Box<dyn Transformer> = match args.transformer {
+        config::Transformers::Sha256 => {
+            Box::new(Sha256Transformer::default())
+        },
+        config::Transformers::Sha1 => {
+            Box::new(Sha1Transformer::default())
+        }
+    };
+
     let mut config = config((
-        args.transformer,
+        transformer,
         validator
     ));
 
